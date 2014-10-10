@@ -33,6 +33,9 @@ All the following methods (excluding the last one) return a different Universall
 //changes each time (no persistent)
 +(NSString *)uuid;
 
+//changes each time (no persistent), but allows to keep in memory more temporary uuids
++(NSString *)uuidForKey:(id<NSCopying>)key;
+
 //changes each time the app gets launched (persistent to session)
 +(NSString *)uuidForSession;
 
@@ -46,7 +49,7 @@ All the following methods (excluding the last one) return a different Universall
 +(NSString *)uuidForDevice;
 ```
 ```objective-c
-//returns the list of all uuidForDevice of the same user, in this way it's possible manage guest accounts across multiple devices easily.
+//returns the list of all uuidForDevice of the same user, in this way it's possible manage guest accounts across multiple devices easily
 +(NSArray *)uuidsOfUserDevices;
 ```
 
