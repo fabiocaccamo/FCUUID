@@ -1,9 +1,7 @@
 FCUUID [![Pod version](https://badge.fury.io/co/FCUUID.svg)](http://badge.fury.io/co/FCUUID)
 ===================
 iOS **UUID** library as alternative to the old good **UDID** and **identifierForVendor**.  
-
 This library provides the simplest API to obtain **universally unique identifiers with different persistency levels**.  
-All methods can be called as static methods or via the shared instance.  
 
 It's possible to retrieve the **UUIDs created for all devices of the same user**, in this way with a little bit of server-side help **it's possible manage guest accounts across multiple devices easily.**
 
@@ -25,8 +23,8 @@ It's possible to retrieve the **UUIDs created for all devices of the same user**
 - Manual install [UICKeyChainStore](https://github.com/kishikawakatsumi/UICKeyChainStore)
 
 ##Usage setup
-- Add an observer to the **FCUUIDsOfUserDevicesDidChangeNotification** to be notified about user devices changes.
-- Call `[FCUUID sharedInstance]` or any other method in *applicationDidFinishLaunchingWithOptions* to start iCloud sync.
+- Add an observer to the **FCUUIDsOfUserDevicesDidChangeNotification** to be notified about uuids of user devices changes.
+- Call any method in *applicationDidFinishLaunchingWithOptions* to enforce iCloud sync.
 
 ##API
 All the following methods (excluding the last one) return a different Universally Unique Identifier, each one with its own persistency level.
@@ -46,9 +44,9 @@ All the following methods (excluding the last one) return a different Universall
 
 //changes only on system reset, this is the best replacement to the good old udid (persistent to device)
 +(NSString *)uuidForDevice;
-
-//returns the list of all uuidForDevice of the same user
-//in this way it's possible manage guest accounts across multiple devices easily.
+```
+```objective-c
+//returns the list of all uuidForDevice of the same user, in this way it's possible manage guest accounts across multiple devices easily.
 +(NSArray *)uuidsOfUserDevices;
 ```
 
