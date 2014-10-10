@@ -13,7 +13,7 @@ It's possible to retrieve the **UUIDs created for all devices of the same user**
 - Key-value storage enabled *(target / Capabilities / iCloud / Key-value storage)*
 - Security.framework
 - [UICKeyChainStore](https://github.com/kishikawakatsumi/UICKeyChainStore)
-- *(optional)* KeyChain sharing enabled if you need to share the same uuidForDevice / uuidsOfUserDevices values accross multiple apps.
+- *(optional)* KeyChain sharing enabled (entitlements and provisioning profile) if you need to share the same uuidForDevice / uuidsOfUserDevices values accross multiple apps with the same bundle seed.
 
 ##Installation
 
