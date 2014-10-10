@@ -11,6 +11,7 @@ extern NSString *const FCUUIDsOfUserDevicesDidChangeNotification;
 
 @interface FCUUID : NSObject
 {
+    NSMutableDictionary *_uuidForKey;
     NSString *_uuidForSession;
     NSString *_uuidForInstallation;
     NSString *_uuidForDevice;
@@ -19,6 +20,7 @@ extern NSString *const FCUUIDsOfUserDevicesDidChangeNotification;
 }
 
 +(NSString *)uuid;
++(NSString *)uuidForKey:(id<NSCopying>)key;
 +(NSString *)uuidForSession;
 +(NSString *)uuidForInstallation;
 +(NSString *)uuidForVendor;

@@ -62,6 +62,24 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 }
 
 
+-(NSString *)uuidForKey:(id<NSCopying>)key
+{
+    if( _uuidForKey == nil ){
+        _uuidForKey = [[NSMutableDictionary alloc] init];
+    }
+    
+    NSString *uuidValue = [_uuidForKey objectForKey:key];
+    
+    if( uuidValue == nil ){
+        uuidValue = [self uuid];
+        
+        [_uuidForKey setObject:uuidValue forKey:key];
+    }
+    
+    return uuidValue;
+}
+
+
 -(NSString *)uuidForSession
 {
     if( _uuidForSession == nil ){
@@ -234,6 +252,12 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 +(NSString *)uuid
 {
     return [[self sharedInstance] uuid];
+}
+
+
++(NSString *)uuidForKey:(id<NSCopying>)key
+{
+    return [[self sharedInstance] uuidForKey:key];
 }
 
 
