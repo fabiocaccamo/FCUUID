@@ -18,20 +18,11 @@ extern NSString *const FCUUIDsOfUserDevicesDidChangeNotification;
     NSMutableOrderedSet *_uuidsOfUserDevicesSet;
 }
 
--(NSString *)uuid;
--(NSString *)uuidForSession;
--(NSString *)uuidForInstallation;
--(NSString *)uuidForVendor;
--(NSString *)uuidForDevice;
--(NSArray *)uuidsOfUserDevices;
-
 +(NSString *)uuid;
 +(NSString *)uuidForSession;
 +(NSString *)uuidForInstallation;
 +(NSString *)uuidForVendor;
 +(NSString *)uuidForDevice;
 +(NSArray *)uuidsOfUserDevices;
-
-+(FCUUID *)sharedInstance;
 
 @end
