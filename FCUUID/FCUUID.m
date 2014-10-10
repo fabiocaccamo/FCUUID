@@ -51,13 +51,14 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 {
     //also known as uuid/universallyUniqueIdentifier
     
-    CFUUIDRef theUUID = CFUUIDCreate(NULL);
-    CFStringRef string = CFUUIDCreateString(NULL, theUUID);
-    CFRelease(theUUID);
-    NSString *theUUIDString = (__bridge_transfer NSString *)string;
-    theUUIDString = [theUUIDString lowercaseString];
-    theUUIDString = [theUUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    return theUUIDString;
+    CFUUIDRef uuidRef = CFUUIDCreate(NULL);
+    CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
+    CFRelease(uuidRef);
+    
+    NSString *uuidValue = (__bridge_transfer NSString *)uuidStringRef;
+    uuidValue = [uuidValue lowercaseString];
+    uuidValue = [uuidValue stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    return uuidValue;
 }
 
 
