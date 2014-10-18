@@ -195,7 +195,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
                 {
                     NSString *uuidValue = (NSString *)obj;
                     
-                    if([uuidKey rangeOfString:uuidValue].location != NSNotFound && [uuidValue length] >= 32)
+                    if([uuidKey rangeOfString:uuidValue].location != NSNotFound && [self uuidValueIsValid:uuidValue])
                     {
                         //NSLog(@"uuid: %@", uuidValue);
                         
@@ -249,6 +249,13 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 }
 
 
+-(BOOL)uuidValueIsValid:(NSString *)uuidValue
+{
+    //TODO validation using Regular Expression
+    return (uuidValue != nil && (uuidValue.length == 32 || uuidValue.length == 36));
+}
+
+
 +(NSString *)uuid
 {
     return [[self sharedInstance] uuid];
@@ -288,6 +295,12 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 +(NSArray *)uuidsOfUserDevices
 {
     return [[self sharedInstance] uuidsOfUserDevices];
+}
+
+
++(BOOL)uuidValueIsValid:(NSString *)uuidValue
+{
+    return [[self sharedInstance] uuidValueIsValid:uuidValue];
 }
 
 

@@ -27,4 +27,6 @@ extern NSString *const FCUUIDsOfUserDevicesDidChangeNotification;
 +(NSString *)uuidForDevice;
 +(NSArray *)uuidsOfUserDevices;
 
++(BOOL)uuidValueIsValid:(NSString *)uuidValue;
+
 @end
