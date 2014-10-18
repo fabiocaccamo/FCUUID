@@ -124,6 +124,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 -(NSString *)uuidForDeviceUsingValue:(NSString *)uuidValue
 {
     //also known as udid/uniqueDeviceIdentifier but this doesn't persists to system reset
+    
     NSString *uuidForDeviceInMemory = _uuidForDevice;
     
     if( [self uuidValueIsValid:uuidValue] )
@@ -193,18 +194,6 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
         return uuidToMigrate;
     }
 }
-                
-                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                [defaults setObject:_uuidForDevice forKey:_uuidForDeviceKey];
-                [defaults synchronize];
-            }
-            
-            [UICKeyChainStore setString:_uuidForDevice forKey:_uuidForDeviceKey];
-        }
-    }
-    
-    return _uuidForDevice;
-}
 
 
 -(void)uuidsOfUserDevices_iCloudInit
@@ -249,7 +238,9 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
         NSMutableOrderedSet *uuidsSet = [[NSMutableOrderedSet alloc] initWithArray:[self uuidsOfUserDevices]];
         NSInteger uuidsCount = [uuidsSet count];
         
-        NSDictionary *iCloudDict = [[NSUbiquitousKeyValueStore defaultStore] dictionaryRepresentation];
+        NSUbiquitousKeyValueStore *iCloud = [NSUbiquitousKeyValueStore defaultStore];
+        NSDictionary *iCloudDict = [iCloud dictionaryRepresentation];
+        
         //NSLog(@"uuidsOfUserDevicesSync: %@", iCloudDict);
         
         [iCloudDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
