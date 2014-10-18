@@ -28,7 +28,6 @@ extern NSString *const FCUUIDsOfUserDevicesDidChangeNotification;
 +(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key commitMigration:(BOOL)commitMigration;
 +(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key service:(NSString *)service commitMigration:(BOOL)commitMigration;
 +(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key service:(NSString *)service accessGroup:(NSString *)accessGroup commitMigration:(BOOL)commitMigration;
-+(NSString *)uuidForUser;
 +(NSArray *)uuidsOfUserDevices;
 
 +(BOOL)uuidValueIsValid:(NSString *)uuidValue;
