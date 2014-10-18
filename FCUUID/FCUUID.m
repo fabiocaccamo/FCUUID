@@ -98,9 +98,8 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
         if( _uuidForInstallation == nil ){
             _uuidForInstallation = [self uuid];
             
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            [defaults setObject:_uuidForInstallation forKey:_uuidForInstallationKey];
-            [defaults synchronize];
+            [[NSUserDefaults standardUserDefaults] setObject:_uuidForInstallation forKey:_uuidForInstallationKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
         }
     }
     
@@ -118,14 +117,82 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 {
     //also known as udid/uniqueDeviceIdentifier but this doesn't persists to system reset
     
+    return [self uuidForDeviceUsingValue:nil];
+}
+
+
+-(NSString *)uuidForDeviceUsingValue:(NSString *)uuidValue
+{
+    //also known as udid/uniqueDeviceIdentifier but this doesn't persists to system reset
+    NSString *uuidForDeviceInMemory = _uuidForDevice;
+    
+    if( [self uuidValueIsValid:uuidValue] )
+    {
+        _uuidForDevice = uuidValue;
+    }
+    
     if( _uuidForDevice == nil ){
         _uuidForDevice = [UICKeyChainStore stringForKey:_uuidForDeviceKey];
         
         if( _uuidForDevice == nil ){
             _uuidForDevice = [[NSUserDefaults standardUserDefaults] stringForKey:_uuidForDeviceKey];
             
-            if( _uuidForDevice == nil ){
-                _uuidForDevice = [self uuid];
+            if( _uuidForDevice == nil )
+            {
+                if([self uuidValueIsValid:uuidValue] )
+                {
+                    _uuidForDevice = uuidValue;
+                }
+                else {
+                    _uuidForDevice = [self uuid];
+                }
+            }
+        }
+    }
+    
+    if(![uuidForDeviceInMemory isEqualToString:_uuidForDevice])
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:_uuidForDevice forKey:_uuidForDeviceKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        [UICKeyChainStore setString:_uuidForDevice forKey:_uuidForDeviceKey];
+    }
+    
+    return _uuidForDevice;
+}
+
+
+-(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key commitMigration:(BOOL)commitMigration
+{
+    return [self uuidForDeviceMigratingValueForKey:key service:nil accessGroup:nil commitMigration:commitMigration];
+}
+
+
+-(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key service:(NSString *)service commitMigration:(BOOL)commitMigration
+{
+    return [self uuidForDeviceMigratingValueForKey:key service:service accessGroup:nil commitMigration:commitMigration];
+}
+
+
+-(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key service:(NSString *)service accessGroup:(NSString *)accessGroup commitMigration:(BOOL)commitMigration
+{
+    NSString *uuidToMigrate = nil;
+    
+    uuidToMigrate = [UICKeyChainStore stringForKey:key service:service accessGroup:accessGroup];
+    
+    if( uuidToMigrate == nil )
+    {
+        uuidToMigrate = [[NSUserDefaults standardUserDefaults] stringForKey:key];
+    }
+    
+    if( commitMigration )
+    {
+        return [self uuidForDeviceUsingValue:uuidToMigrate];
+    }
+    else {
+        return uuidToMigrate;
+    }
+}
                 
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 [defaults setObject:_uuidForDevice forKey:_uuidForDeviceKey];
@@ -212,9 +279,8 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
         {
             _uuidsOfUserDevices = [[uuidsSet array] componentsJoinedByString:@"|"];
             
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            [defaults setObject:_uuidsOfUserDevices forKey:_uuidsOfUserDevicesKey];
-            [defaults synchronize];
+            [[NSUserDefaults standardUserDefaults] setObject:_uuidsOfUserDevices forKey:_uuidsOfUserDevicesKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
             
             [UICKeyChainStore setString:_uuidsOfUserDevices forKey:_uuidsOfUserDevicesKey];
             
@@ -227,6 +293,8 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 
 -(NSArray *)uuidsOfUserDevices
 {
+    NSString *uuidsOfUserDevicesInMemory = _uuidsOfUserDevices;
+    
     if( _uuidsOfUserDevices == nil ){
         _uuidsOfUserDevices = [UICKeyChainStore stringForKey:_uuidsOfUserDevicesKey];
         
@@ -235,14 +303,16 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
             
             if( _uuidsOfUserDevices == nil ){
                 _uuidsOfUserDevices = [self uuidForDevice];
-                
-                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                [defaults setObject:_uuidsOfUserDevices forKey:_uuidsOfUserDevicesKey];
-                [defaults synchronize];
             }
-            
-            [UICKeyChainStore setString:_uuidsOfUserDevices forKey:_uuidsOfUserDevicesKey];
         }
+    }
+    
+    if(![uuidsOfUserDevicesInMemory isEqualToString:_uuidsOfUserDevices])
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:_uuidsOfUserDevices forKey:_uuidsOfUserDevicesKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        [UICKeyChainStore setString:_uuidsOfUserDevices forKey:_uuidsOfUserDevicesKey];
     }
     
     return [_uuidsOfUserDevices componentsSeparatedByString:@"|"];
@@ -289,6 +359,24 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 +(NSString *)uuidForDevice
 {
     return [[self sharedInstance] uuidForDevice];
+}
+
+
++(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key commitMigration:(BOOL)commitMigration
+{
+    return [[self sharedInstance] uuidForDeviceMigratingValueForKey:key service:nil accessGroup:nil commitMigration:commitMigration];
+}
+
+
++(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key service:(NSString *)service commitMigration:(BOOL)commitMigration
+{
+    return [[self sharedInstance] uuidForDeviceMigratingValueForKey:key service:service accessGroup:nil commitMigration:commitMigration];
+}
+
+
++(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key service:(NSString *)service accessGroup:(NSString *)accessGroup commitMigration:(BOOL)commitMigration
+{
+    return [[self sharedInstance] uuidForDeviceMigratingValueForKey:key service:service accessGroup:accessGroup commitMigration:commitMigration];
 }
 
 
