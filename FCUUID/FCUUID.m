@@ -152,6 +152,11 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
         }
     }
     
+    if([self uuidValueIsValid:uuidValue] && ![_uuidForDevice isEqualToString:uuidValue])
+    {
+        [NSException raise:@"Cannot overwrite uuidForDevice" format:@"uuidForDevice has already been created and cannot be overwritten."];
+    }
+    
     if(![uuidForDeviceInMemory isEqualToString:_uuidForDevice])
     {
         [[NSUserDefaults standardUserDefaults] setObject:_uuidForDevice forKey:_uuidForDeviceKey];
@@ -189,7 +194,16 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
     
     if( commitMigration )
     {
-        return [self uuidForDeviceUsingValue:uuidToMigrate];
+        if([self uuidValueIsValid:uuidToMigrate])
+        {
+            return [self uuidForDeviceUsingValue:uuidToMigrate];
+        }
+        else {
+            
+            [NSException raise:@"Invalid uuid to migrate" format:uuidToMigrate];
+            
+            return nil;
+        }
     }
     else {
         return uuidToMigrate;
