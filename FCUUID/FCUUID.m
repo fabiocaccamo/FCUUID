@@ -200,7 +200,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
         }
         else {
             
-            [NSException raise:@"Invalid uuid to migrate" format:uuidToMigrate];
+            [NSException raise:@"Invalid uuid to migrate" format:@"uuid value should be a string of 32 or 36 characters."];
             
             return nil;
         }
