@@ -126,12 +126,13 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
     //also known as udid/uniqueDeviceIdentifier but this doesn't persists to system reset
     
     NSString *uuidForDeviceInMemory = _uuidForDevice;
-    
+    /*
+    //this would overwrite an existing uuid, it could be dangerous
     if( [self uuidValueIsValid:uuidValue] )
     {
         _uuidForDevice = uuidValue;
     }
-    
+    */
     if( _uuidForDevice == nil ){
         _uuidForDevice = [UICKeyChainStore stringForKey:_uuidForDeviceKey];
         
