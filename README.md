@@ -11,7 +11,7 @@ It's possible to retrieve the **UUIDs created for all devices of the same user**
 - Key-value storage enabled *(target / Capabilities / iCloud / Key-value storage)*
 - Security.framework
 - [UICKeyChainStore](https://github.com/kishikawakatsumi/UICKeyChainStore)
-- *(optional)* KeyChain sharing enabled (entitlements and provisioning profile) if you need to share the same uuidForDevice / uuidsOfUserDevices values accross multiple apps with the same bundle seed.
+- ***(optional)*** - KeyChain sharing enabled (entitlements and provisioning profile) if you need to **share** the same `uuidForDevice` / `uuidsOfUserDevices` values **accross multiple apps with the same bundle seed**.
 
 ##Installation
 
@@ -23,11 +23,13 @@ It's possible to retrieve the **UUIDs created for all devices of the same user**
 - Manual install [UICKeyChainStore](https://github.com/kishikawakatsumi/UICKeyChainStore)
 
 ##Usage setup
-- Add an observer to the **FCUUIDsOfUserDevicesDidChangeNotification** to be notified about uuids of user devices changes.
-- Call any method in *applicationDidFinishLaunchingWithOptions* to enforce iCloud sync.
+It is recommended to do the setup in `applicationDidFinishLaunchingWithOptions` method.
+- Add an observer to the `FCUUIDsOfUserDevicesDidChangeNotification` to be notified about uuids of user devices changes.
+- If necessary, **migrate from a previously used UUID or UDID** using one of the migrations methods listed in the API section (it's recommended to do migration before calling `uuidForDevice` or `uuidsForUserDevices` methods).
+- Call any class method to enforce iCloud sync.
 
 ##API
-All the following methods (excluding the last one) return a different Universally Unique Identifier, each one with its own persistency level.
+**Get different UUIDs** (each one with its own persistency level) 
 
 ```objective-c
 //changes each time (no persistent)
@@ -48,9 +50,24 @@ All the following methods (excluding the last one) return a different Universall
 //changes only on system reset, this is the best replacement to the good old udid (persistent to device)
 +(NSString *)uuidForDevice;
 ```
+**Get the list of UUIDs of user devices**
 ```objective-c
 //returns the list of all uuidForDevice of the same user, in this way it's possible manage guest accounts across multiple devices easily
 +(NSArray *)uuidsOfUserDevices;
 ```
-
+**Migrate from a previously stored UUID / UDID**  
+Before migrating an existing value it's recommended to **debug it** by simply passing `commitMigration:NO` and logging the returned value.  
+The migration works only if the existing value is a valid uuid and `uuidForDevice` **has not been created yet**.  
+When you will be ready for committing the migration, use `commitMigration:YES`.  
+After the migration, any future call to `uuidForDevice` will return the migrated value.
+```objective-c
+//these methods search for an existing UUID / UDID stored in the KeyChain or in UserDefaults for the given key / service / access-group
++(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key commitMigration:(BOOL)commitMigration;
++(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key service:(NSString *)service commitMigration:(BOOL)commitMigration;
++(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key service:(NSString *)service accessGroup:(NSString *)accessGroup commitMigration:(BOOL)commitMigration;
+```
+**Check if value is a valid UUID**
+```objective-c
++(BOOL)uuidValueIsValid:(NSString *)uuidValue;
+```
 Enjoy :)
