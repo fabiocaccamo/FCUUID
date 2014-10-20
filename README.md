@@ -25,7 +25,7 @@ It's possible to retrieve the **UUIDs created for all devices of the same user**
 ##Usage setup
 It is recommended to do the setup in `applicationDidFinishLaunchingWithOptions` method.
 - Add an observer to the `FCUUIDsOfUserDevicesDidChangeNotification` to be notified about uuids of user devices changes.
-- If necessary, **migrate from a previously used UUID or UDID** using one of the migrations methods listed in the API section (it's recommended to do migration before calling `uuidForDevice` or `uuidsForUserDevices` methods).
+- If necessary, **migrate from a previously used UUID or UDID** using one of the migrations methods listed in the API section (it's recommended to do migration before calling `uuidForDevice` or `uuidsForUserDevices` methods). Keep in mind that **migration works only if the existing value is a valid uuid and `uuidForDevice` has not been created yet**.
 - Call any class method to enforce iCloud sync.
 
 ##API
@@ -57,7 +57,6 @@ It is recommended to do the setup in `applicationDidFinishLaunchingWithOptions` 
 ```
 **Migrate from a previously stored UUID / UDID**  
 Before migrating an existing value it's recommended to **debug it** by simply passing `commitMigration:NO` and logging the returned value.  
-The migration works only if the existing value is a valid uuid and `uuidForDevice` **has not been created yet**.  
 When you will be ready for committing the migration, use `commitMigration:YES`.  
 After the migration, any future call to `uuidForDevice` will return the migrated value.
 ```objective-c
