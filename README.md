@@ -1,4 +1,4 @@
-FCUUID [![Pod version](https://badge.fury.io/co/FCUUID.svg)](http://badge.fury.io/co/FCUUID)
+FCUUID ![Pod version](http://img.shields.io/cocoapods/v/FCUUID.svg) ![Pod platforms](http://img.shields.io/cocoapods/p/FCUUID.svg) ![Pod license](http://img.shields.io/cocoapods/l/FCUUID.svg)
 ===================
 iOS **UUID** library as alternative to the old good **UDID** and **identifierForVendor**.  
 This library provides the simplest API to obtain **universally unique identifiers with different persistency levels**.  
