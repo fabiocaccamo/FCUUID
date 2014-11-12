@@ -9,6 +9,13 @@
 
 extern NSString *const FCUUIDsOfUserDevicesDidChangeNotification;
 
+@protocol FCUUIDDelegate <NSObject>
+@required
+- (NSString *)fcuuidKeychainStringForKey:(NSString *)key;
+- (NSString *)fcuuidKeychainStringForKey:(NSString *)key service:(NSString *)service accessGroup:(NSString *)accessGroup;
+- (BOOL)fcuuidKeychainSetString:(NSString *)value forKey:(NSString *)key;
+@end
+
 @interface FCUUID : NSObject
 {
     NSMutableDictionary *_uuidForKey;

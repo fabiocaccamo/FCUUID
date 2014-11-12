@@ -6,7 +6,6 @@
 //
 
 #import "FCUUID.h"
-#import "UICKeyChainStore.h"
 
 
 @implementation FCUUID
@@ -134,7 +133,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
     }
     */
     if( _uuidForDevice == nil ){
-        _uuidForDevice = [UICKeyChainStore stringForKey:_uuidForDeviceKey];
+        _uuidForDevice = [self fcuuidKeychainStringForKey:_uuidForDeviceKey];
         
         if( _uuidForDevice == nil ){
             _uuidForDevice = [[NSUserDefaults standardUserDefaults] stringForKey:_uuidForDeviceKey];
@@ -162,7 +161,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
         [[NSUserDefaults standardUserDefaults] setObject:_uuidForDevice forKey:_uuidForDeviceKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
-        [UICKeyChainStore setString:_uuidForDevice forKey:_uuidForDeviceKey];
+        [self fcuuidKeychainSetString:_uuidForDevice forKey:_uuidForDeviceKey];
     }
     
     return _uuidForDevice;
@@ -185,7 +184,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 {
     NSString *uuidToMigrate = nil;
     
-    uuidToMigrate = [UICKeyChainStore stringForKey:key service:service accessGroup:accessGroup];
+    uuidToMigrate = [self fcuuidKeychainStringForKey:key service:service accessGroup:accessGroup];
     
     if( uuidToMigrate == nil )
     {
@@ -288,7 +287,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
             [[NSUserDefaults standardUserDefaults] setObject:_uuidsOfUserDevices forKey:_uuidsOfUserDevicesKey];
             [[NSUserDefaults standardUserDefaults] synchronize];
             
-            [UICKeyChainStore setString:_uuidsOfUserDevices forKey:_uuidsOfUserDevicesKey];
+            [self fcuuidKeychainSetString:_uuidsOfUserDevices forKey:_uuidsOfUserDevicesKey];
             
             NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[self uuidsOfUserDevices] forKey:@"uuidsOfUserDevices"];
             [[NSNotificationCenter defaultCenter] postNotificationName:FCUUIDsOfUserDevicesDidChangeNotification object:self userInfo:userInfo];
@@ -302,7 +301,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
     NSString *uuidsOfUserDevicesInMemory = _uuidsOfUserDevices;
     
     if( _uuidsOfUserDevices == nil ){
-        _uuidsOfUserDevices = [UICKeyChainStore stringForKey:_uuidsOfUserDevicesKey];
+        _uuidsOfUserDevices = [self fcuuidKeychainStringForKey:_uuidsOfUserDevicesKey];
         
         if( _uuidsOfUserDevices == nil ){
             _uuidsOfUserDevices = [[NSUserDefaults standardUserDefaults] stringForKey:_uuidsOfUserDevicesKey];
@@ -318,7 +317,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
         [[NSUserDefaults standardUserDefaults] setObject:_uuidsOfUserDevices forKey:_uuidsOfUserDevicesKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
-        [UICKeyChainStore setString:_uuidsOfUserDevices forKey:_uuidsOfUserDevicesKey];
+        [self fcuuidKeychainSetString:_uuidsOfUserDevices forKey:_uuidsOfUserDevicesKey];
     }
     
     return [_uuidsOfUserDevices componentsSeparatedByString:@"|"];
@@ -397,5 +396,27 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
     return [[self sharedInstance] uuidValueIsValid:uuidValue];
 }
 
+#pragma mark - Keychain Wrapper methods
+
+- (NSString *)fcuuidKeychainStringForKey:(NSString *)key
+{
+    [NSException raise:NSInternalInconsistencyException
+                format:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)];
+    return nil;
+}
+
+- (NSString *)fcuuidKeychainStringForKey:(NSString *)key service:(NSString *)service accessGroup:(NSString *)accessGroup
+{
+    [NSException raise:NSInternalInconsistencyException
+                format:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)];
+    return nil;
+}
+
+- (BOOL)fcuuidKeychainSetString:(NSString *)value forKey:(NSString *)key
+{
+    [NSException raise:NSInternalInconsistencyException
+                format:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)];
+    return NO;
+}
 
 @end
