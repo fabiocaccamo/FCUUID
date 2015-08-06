@@ -70,6 +70,11 @@ After the migration, any future call to `uuidForDevice` will return the migrated
 +(BOOL)uuidValueIsValid:(NSString *)uuidValue;
 ```
 
+##Donate
+Do you want to support me?
+
+[![Donate](https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_pp_142x27.png "Buy me a beer! - C.R.E.A.M.")](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=fabio%2ecaccamo%40gmail%2ecom&lc=IT&item_name=Fabio%20Caccamo%20%2d%20Open%20Source%20Projects&item_number=FCUUID&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted "Buy me a beer! - C.R.E.A.M.")
+
 ##License
 The MIT License (MIT)
 
