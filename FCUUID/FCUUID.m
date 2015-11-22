@@ -325,6 +325,14 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 }
 
 
+-(NSArray *)uuidsOfUserDevicesExcludingCurrentDevice
+{
+    NSMutableArray *uuids = [NSMutableArray arrayWithArray:[self uuidsOfUserDevices]];
+    [uuids removeObject:[self uuidForDevice]];
+    return [NSArray arrayWithArray:uuids];
+}
+
+
 -(BOOL)uuidValueIsValid:(NSString *)uuidValue
 {
     //TODO validation using Regular Expression
@@ -389,6 +397,12 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 +(NSArray *)uuidsOfUserDevices
 {
     return [[self sharedInstance] uuidsOfUserDevices];
+}
+
+
++(NSArray *)uuidsOfUserDevicesExcludingCurrentDevice
+{
+    return [[self sharedInstance] uuidsOfUserDevicesExcludingCurrentDevice];
 }
 
 
