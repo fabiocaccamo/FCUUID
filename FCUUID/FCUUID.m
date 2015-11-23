@@ -335,8 +335,34 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 
 -(BOOL)uuidValueIsValid:(NSString *)uuidValue
 {
-    //TODO validation using Regular Expression
-    return (uuidValue != nil && (uuidValue.length == 32 || uuidValue.length == 36));
+    if(uuidValue != nil)// && (uuidValue.length == 32 || uuidValue.length == 36))
+    {
+        NSString *uuidPattern = @"^[0-9a-f]{32}|[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}$";
+        NSRegularExpression *uuidRegExp = [NSRegularExpression regularExpressionWithPattern:uuidPattern options:NSRegularExpressionCaseInsensitive error:nil];
+        
+        NSRange uuidValueRange = NSMakeRange(0, [uuidValue length]);
+        NSRange uuidMatchRange = [uuidRegExp rangeOfFirstMatchInString:uuidValue options:0 range:uuidValueRange];
+        NSString *uuidMatchValue;
+        
+        if(!NSEqualRanges(uuidMatchRange, NSMakeRange(NSNotFound, 0)))
+        {
+            uuidMatchValue = [uuidValue substringWithRange:uuidMatchRange];
+            
+            if([uuidMatchValue isEqualToString:uuidValue])
+            {
+                return YES;
+            }
+            else {
+                return NO;
+            }
+        }
+        else {
+            return NO;
+        }
+    }
+    else {
+        return NO;
+    }
 }
 
 
