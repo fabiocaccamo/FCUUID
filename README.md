@@ -19,7 +19,7 @@ It's possible to retrieve the **UUIDs created for all devices of the same user**
 `pod 'FCUUID'`
 
 ####Manual install:
-- Copy `FCUUID.h` and `FCUUID.m` to your project.
+- Copy `FCUUID` folder to your project.
 - Manual install [UICKeyChainStore](https://github.com/kishikawakatsumi/UICKeyChainStore)
 
 ##Usage setup
@@ -49,6 +49,9 @@ It is recommended to do the setup in `applicationDidFinishLaunchingWithOptions` 
 
 //changes only on system reset, this is the best replacement to the good old udid (persistent to device)
 +(NSString *)uuidForDevice;
+//or
+#import "UIDevice+FCUUID.h"
+[[UIDevice currentDevice] uuid];
 ```
 **Get the list of UUIDs of user devices**
 ```objective-c
