@@ -22,7 +22,7 @@ It's possible to retrieve the **UUIDs created for all devices of the same user**
 - Copy `FCUUID` folder to your project.
 - Manual install [UICKeyChainStore](https://github.com/kishikawakatsumi/UICKeyChainStore)
 
-##Usage setup
+##Usage setup (optional)
 It is recommended to do the setup in `applicationDidFinishLaunchingWithOptions` method.
 - Add an observer to the `FCUUIDsOfUserDevicesDidChangeNotification` to be notified about uuids of user devices changes.
 - If necessary, **migrate from a previously used UUID or UDID** using one of the migrations methods listed in the API section (it's recommended to do migration before calling `uuidForDevice` or `uuidsForUserDevices` methods). Keep in mind that **migration works only if the existing value is a valid uuid and `uuidForDevice` has not been created yet**.
