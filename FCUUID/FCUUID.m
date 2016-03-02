@@ -157,7 +157,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
         [NSException raise:@"Cannot overwrite uuidForDevice" format:@"uuidForDevice has already been created and cannot be overwritten."];
     }
     
-    if(![uuidForDeviceInMemory isEqualToString:_uuidForDevice])
+    if(!uuidForDeviceInMemory || ![uuidForDeviceInMemory isEqualToString:_uuidForDevice])
     {
         [[NSUserDefaults standardUserDefaults] setObject:_uuidForDevice forKey:_uuidForDeviceKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
