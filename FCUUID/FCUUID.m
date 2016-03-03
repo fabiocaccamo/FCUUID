@@ -109,7 +109,11 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 
 -(NSString *)uuidForVendor
 {
-    return [[[[[UIDevice currentDevice] identifierForVendor] UUIDString] lowercaseString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    if( _uuidForVendor == nil ){
+        _uuidForVendor = [[[[[UIDevice currentDevice] identifierForVendor] UUIDString] lowercaseString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    }
+    
+    return _uuidForVendor;
 }
 
 

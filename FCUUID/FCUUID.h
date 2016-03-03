@@ -15,6 +15,7 @@ extern NSString *const FCUUIDsOfUserDevicesDidChangeNotification;
     NSMutableDictionary *_uuidForKey;
     NSString *_uuidForSession;
     NSString *_uuidForInstallation;
+    NSString *_uuidForVendor;
     NSString *_uuidForDevice;
     NSString *_uuidsOfUserDevices;
     NSMutableOrderedSet *_uuidsOfUserDevicesSet;
