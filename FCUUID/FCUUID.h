@@ -2,7 +2,7 @@
 //  FCUUID.h
 //
 //  Created by Fabio Caccamo on 26/06/14.
-//  Copyright © 2014-2015 Fabio Caccamo. All rights reserved.
+//  Copyright © 2016 Fabio Caccamo. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
