@@ -100,7 +100,7 @@ You must have **KeyChain sharing enabled** (entitlements and provisioning profil
 ####What happens if I call `uuidForDevice` on 2 different devices using same iCloud account and iCloud Keychain?
 You will obtain 2 **different uuid(s)**, and if you call `uuidsOfUserDevices` you will obtain a list containing the uuids of both devices.
 
-####When I reboot|upgrade|reset my device system, will device uuid change?
+####When I reboot / upgrade / reset my device system, will device uuid change?
 Please check the **persistence** table above.
 
 ##Donate
