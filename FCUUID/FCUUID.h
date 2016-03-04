@@ -18,6 +18,7 @@ extern NSString *const FCUUIDsOfUserDevicesDidChangeNotification;
     NSString *_uuidForVendor;
     NSString *_uuidForDevice;
     NSString *_uuidsOfUserDevices;
+    BOOL _uuidsOfUserDevices_iCloudAvailable;
 }
 
 +(NSString *)uuid;
@@ -26,6 +27,7 @@ extern NSString *const FCUUIDsOfUserDevicesDidChangeNotification;
 +(NSString *)uuidForInstallation;
 +(NSString *)uuidForVendor;
 +(NSString *)uuidForDevice;
++(NSString *)uuidForDeviceMigratingValue:(NSString *)value commitMigration:(BOOL)commitMigration;
 +(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key commitMigration:(BOOL)commitMigration;
 +(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key service:(NSString *)service commitMigration:(BOOL)commitMigration;
 +(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key service:(NSString *)service accessGroup:(NSString *)accessGroup commitMigration:(BOOL)commitMigration;
