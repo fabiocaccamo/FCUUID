@@ -10,5 +10,5 @@ Pod::Spec.new do |spec|
   spec.platform     = :ios, '5.0'
   spec.framework    = 'Foundation', 'UIKit', 'Security'
   spec.requires_arc = true
-  spec.dependency 'UICKeyChainStore', '~> 1.0.5'
+  spec.dependency 'UICKeyChainStore', '~> 2.1.0'
 end
