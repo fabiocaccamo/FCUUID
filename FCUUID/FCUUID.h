@@ -18,7 +18,6 @@ extern NSString *const FCUUIDsOfUserDevicesDidChangeNotification;
     NSString *_uuidForVendor;
     NSString *_uuidForDevice;
     NSString *_uuidsOfUserDevices;
-    NSMutableOrderedSet *_uuidsOfUserDevicesSet;
 }
 
 +(NSString *)uuid;
