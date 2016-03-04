@@ -339,7 +339,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 
 -(BOOL)uuidValueIsValid:(NSString *)uuidValue
 {
-    if(uuidValue != nil)// && (uuidValue.length == 32 || uuidValue.length == 36))
+    if(uuidValue != nil)
     {
         NSString *uuidPattern = @"^[0-9a-f]{32}|[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}$";
         NSRegularExpression *uuidRegExp = [NSRegularExpression regularExpressionWithPattern:uuidPattern options:NSRegularExpressionCaseInsensitive error:nil];
