@@ -47,6 +47,55 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 }
 
 
+-(NSString *)_getOrCreateValueForKey:(NSString *)key defaultValue:(NSString *)defaultValue userDefaults:(BOOL)userDefaults keychain:(BOOL)keychain service:(NSString *)service accessGroup:(NSString *)accessGroup synchronizable:(BOOL)synchronizable
+{
+    NSString *value = [self _getValueForKey:key userDefaults:userDefaults keychain:keychain service:service accessGroup:accessGroup];
+    
+    if(!value){
+        value = defaultValue;
+    }
+    
+    if(!value){
+        value = [self uuid];
+    }
+    
+    [self _setValue:value forKey:key userDefaults:userDefaults keychain:keychain service:service accessGroup:accessGroup synchronizable:synchronizable];
+    
+    return value;
+}
+
+
+-(NSString *)_getValueForKey:(NSString *)key userDefaults:(BOOL)userDefaults keychain:(BOOL)keychain service:(NSString *)service accessGroup:(NSString *)accessGroup
+{
+    NSString *value = nil;
+    
+    if(!value && keychain ){
+        value = [UICKeyChainStore stringForKey:key service:service accessGroup:accessGroup];
+    }
+    
+    if(!value && userDefaults ){
+        value = [[NSUserDefaults standardUserDefaults] stringForKey:key];
+    }
+    
+    return value;
+}
+
+
+-(void)_setValue:(NSString *)value forKey:(NSString *)key userDefaults:(BOOL)userDefaults keychain:(BOOL)keychain service:(NSString *)service accessGroup:(NSString *)accessGroup synchronizable:(BOOL)synchronizable
+{
+    if( value && userDefaults ){
+        [[NSUserDefaults standardUserDefaults] setObject:value forKey:key];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    
+    if( value && keychain ){
+        UICKeyChainStore *keychain = [UICKeyChainStore keyChainStoreWithService:service accessGroup:accessGroup];
+        [keychain setSynchronizable:synchronizable];
+        [keychain setString:value forKey:key];
+    }
+}
+
+
 -(NSString *)uuid
 {
     //also known as uuid/universallyUniqueIdentifier
