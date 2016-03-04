@@ -1,7 +1,7 @@
 FCUUID ![Pod version](http://img.shields.io/cocoapods/v/FCUUID.svg) ![Pod platforms](http://img.shields.io/cocoapods/p/FCUUID.svg) ![Pod license](http://img.shields.io/cocoapods/l/FCUUID.svg)
 ===================
 iOS **UUID** library as alternative to the old good **UDID** and **identifierForVendor**.  
-This library provides the simplest API to obtain **universally unique identifiers with different persistency levels**.  
+This library provides the simplest API to obtain **universally unique identifiers with different levels of [persistence](#persistence)**.  
 
 It's possible to retrieve the **UUIDs created for all devices of the same user**, in this way with a little bit of server-side help **it's possible manage guest accounts across multiple devices easily.**
 
@@ -22,7 +22,7 @@ It's possible to retrieve the **UUIDs created for all devices of the same user**
 - Copy `FCUUID` folder to your project.
 - Manual install [UICKeyChainStore](https://github.com/kishikawakatsumi/UICKeyChainStore)
 
-##Usage setup
+###Optional setup:
 It is recommended to do the setup in `applicationDidFinishLaunchingWithOptions` method.
 - Add an observer to the `FCUUIDsOfUserDevicesDidChangeNotification` to be notified about uuids of user devices changes.
 - If necessary, **migrate from a previously used UUID or UDID** using one of the migrations methods listed in the API section (it's recommended to do migration before calling `uuidForDevice` or `uuidsForUserDevices` methods). Keep in mind that **migration works only if the existing value is a valid uuid and `uuidForDevice` has not been created yet**.
@@ -72,6 +72,24 @@ After the migration, any future call to `uuidForDevice` will return the migrated
 ```objective-c
 +(BOOL)uuidValueIsValid:(NSString *)uuidValue;
 ```
+
+##Persistence 
+- **`√`** *yes* 
+- `-` *no* 
+- **`*`** *read notes below* 
+
+| PERSISTS              | App memory | App relaunch | Reset Advertising Identifier | App reinstall | System reboot | System upgrade | System reset |
+|-----------------------|:----------:|:------------:|:----------------------------:|:-------------:|:-------------:|:--------------:|:------------:|
+| `uuid`                |      -     |       -      |               -              |       -       |       -       |        -       |       -      |
+| `uuidForKey:key`      |    **√**   |       -      |               -              |       -       |       -       |        -       |       -      |
+| `uuidForSession`      |    **√**   |       -      |               -              |       -       |       -       |        -       |       -      |
+| `uuidForInstallation` |    **√**   |     **√**    |             **√**            |       -       |     **√**     |        -       |       -      |
+| `uuidForVendor`       |    **√**   |     **√**    |               -              |     **√***    |     **√**     |        -       |       -      |
+| `uuidForDevice`       |    **√**   |     **√**    |             **√**            |     **√**     |     **√**     |      **√**     |    **√****   |
+
+**(persists only if the user have not uninstalled all apps of the same vendor)*
+
+***(persists only if the user restores a device backup which includes also keychain's data)*
 
 ##Donate
 Do you want to support me?
