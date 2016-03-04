@@ -11,6 +11,7 @@ It's possible to retrieve the **UUIDs created for all devices of the same user**
 - Key-value storage enabled *(target / Capabilities / iCloud / Key-value storage)*
 - Security.framework
 - [UICKeyChainStore](https://github.com/kishikawakatsumi/UICKeyChainStore)
+- ***(optional)*** - Key-value storage enabled -> Target / Capabilities / iCloud / Key-value storage enabled if you want to **share** `uuidsOfUserDevices` values **across multiple devices using the same iCloud account**.
 - ***(optional)*** - KeyChain sharing enabled (entitlements and provisioning profile) if you need to **share** the same `uuidForDevice` / `uuidsOfUserDevices` values **across multiple apps with the same bundle seed**.
 
 ##Installation
@@ -64,6 +65,7 @@ When you will be ready for committing the migration, use `commitMigration:YES`.
 After the migration, any future call to `uuidForDevice` will return the migrated value.
 ```objective-c
 //these methods search for an existing UUID / UDID stored in the KeyChain or in UserDefaults for the given key / service / access-group
++(NSString *)uuidForDeviceMigratingValue:(NSString *)value commitMigration:(BOOL)commitMigration;
 +(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key commitMigration:(BOOL)commitMigration;
 +(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key service:(NSString *)service commitMigration:(BOOL)commitMigration;
 +(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key service:(NSString *)service accessGroup:(NSString *)accessGroup commitMigration:(BOOL)commitMigration;
@@ -91,6 +93,16 @@ After the migration, any future call to `uuidForDevice` will return the migrated
 
 ***(persists only if the user restores a device backup which includes also keychain's data)*
 
+##FAQ
+####How can I share the device uuid between two apps?
+You must have **KeyChain sharing enabled** (entitlements and provisioning profile) and your apps identifiers must have the same bundle seed.
+
+####What happens if I call `uuidForDevice` on 2 different devices using same iCloud account and iCloud Keychain?
+You will obtain 2 **different uuid(s)**, and if you call `uuidsOfUserDevices` you will obtain a list containing the uuids of both devices.
+
+####When I reboot|upgrade|reset my device system, will device uuid change?
+Please check the **persistence** table above.
+
 ##Donate
 Do you want to support me?
 
@@ -99,7 +111,7 @@ Do you want to support me?
 ##License
 The MIT License (MIT)
 
-Copyright (c) 2015 Fabio Caccamo - fabio.caccamo@gmail.com
+Copyright (c) 2016 Fabio Caccamo - fabio.caccamo@gmail.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
