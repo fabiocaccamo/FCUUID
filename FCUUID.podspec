@@ -1,11 +1,11 @@
 Pod::Spec.new do |spec|
   spec.name         = 'FCUUID'
-  spec.version      = '1.2.0'
+  spec.version      = '1.3.0'
   spec.license      = { :type => 'MIT' }
   spec.homepage     = 'https://github.com/fabiocaccamo/FCUUID'
   spec.authors      = { 'Fabio Caccamo' => 'fabio.caccamo@gmail.com' }
   spec.summary      = 'iOS UUID / Universally Unique Identifiers library as alternative to UDID and identifierForVendor.'
-  spec.source       = { :git => 'https://github.com/fabiocaccamo/FCUUID.git', :tag => '1.2.0' }
+  spec.source       = { :git => 'https://github.com/fabiocaccamo/FCUUID.git', :tag => '1.3.0' }
   spec.source_files = 'FCUUID/*.{h,m}'
   spec.framework    = 'Foundation', 'UIKit', 'Security'
   spec.requires_arc = true
