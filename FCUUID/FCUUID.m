@@ -25,11 +25,11 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 {
     static FCUUID *instance = nil;
     static dispatch_once_t token;
-    
+
     dispatch_once(&token, ^{
         instance = [[self alloc] init];
     });
-    
+
     return instance;
 }
 
@@ -37,12 +37,12 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 -(instancetype)init
 {
     self = [super init];
-    
+
     if(self)
     {
         [self uuidsOfUserDevices_iCloudInit];
     }
-    
+
     return self;
 }
 
@@ -50,17 +50,17 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 -(NSString *)_getOrCreateValueForKey:(NSString *)key defaultValue:(NSString *)defaultValue userDefaults:(BOOL)userDefaults keychain:(BOOL)keychain service:(NSString *)service accessGroup:(NSString *)accessGroup synchronizable:(BOOL)synchronizable
 {
     NSString *value = [self _getValueForKey:key userDefaults:userDefaults keychain:keychain service:service accessGroup:accessGroup];
-    
+
     if(!value){
         value = defaultValue;
     }
-    
+
     if(!value){
         value = [self uuid];
     }
-    
+
     [self _setValue:value forKey:key userDefaults:userDefaults keychain:keychain service:service accessGroup:accessGroup synchronizable:synchronizable];
-    
+
     return value;
 }
 
@@ -68,15 +68,15 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 -(NSString *)_getValueForKey:(NSString *)key userDefaults:(BOOL)userDefaults keychain:(BOOL)keychain service:(NSString *)service accessGroup:(NSString *)accessGroup
 {
     NSString *value = nil;
-    
+
     if(!value && keychain ){
         value = [UICKeyChainStore stringForKey:key service:service accessGroup:accessGroup];
     }
-    
+
     if(!value && userDefaults ){
         value = [[NSUserDefaults standardUserDefaults] stringForKey:key];
     }
-    
+
     return value;
 }
 
@@ -87,7 +87,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
         [[NSUserDefaults standardUserDefaults] setObject:value forKey:key];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
-    
+
     if( value && keychain ){
         UICKeyChainStore *keychain = [UICKeyChainStore keyChainStoreWithService:service accessGroup:accessGroup];
         [keychain setSynchronizable:synchronizable];
@@ -99,11 +99,11 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 -(NSString *)uuid
 {
     //also known as uuid/universallyUniqueIdentifier
-    
+
     CFUUIDRef uuidRef = CFUUIDCreate(NULL);
     CFStringRef uuidStringRef = CFUUIDCreateString(NULL, uuidRef);
     CFRelease(uuidRef);
-    
+
     NSString *uuidValue = (__bridge_transfer NSString *)uuidStringRef;
     uuidValue = [uuidValue lowercaseString];
     uuidValue = [uuidValue stringByReplacingOccurrencesOfString:@"-" withString:@""];
@@ -116,15 +116,15 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
     if( _uuidForKey == nil ){
         _uuidForKey = [[NSMutableDictionary alloc] init];
     }
-    
+
     NSString *uuidValue = [_uuidForKey objectForKey:key];
-    
+
     if( uuidValue == nil ){
         uuidValue = [self uuid];
-        
+
         [_uuidForKey setObject:uuidValue forKey:key];
     }
-    
+
     return uuidValue;
 }
 
@@ -134,7 +134,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
     if( _uuidForSession == nil ){
         _uuidForSession = [self uuid];
     }
-    
+
     return _uuidForSession;
 }
 
@@ -144,7 +144,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
     if( _uuidForInstallation == nil ){
         _uuidForInstallation = [self _getOrCreateValueForKey:_uuidForInstallationKey defaultValue:nil userDefaults:YES keychain:NO service:nil accessGroup:nil synchronizable:NO];
     }
-    
+
     return _uuidForInstallation;
 }
 
@@ -154,7 +154,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
     if( _uuidForVendor == nil ){
         _uuidForVendor = [[[[[UIDevice currentDevice] identifierForVendor] UUIDString] lowercaseString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
     }
-    
+
     return _uuidForVendor;
 }
 
@@ -169,11 +169,11 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 -(NSString *)uuidForDevice
 {
     //also known as udid/uniqueDeviceIdentifier but this doesn't persists to system reset
-    
+
     if( _uuidForDevice == nil ){
         _uuidForDevice = [self _getOrCreateValueForKey:_uuidForDeviceKey defaultValue:nil userDefaults:YES keychain:YES service:nil accessGroup:nil synchronizable:NO];
     }
-    
+
     return _uuidForDevice;
 }
 
@@ -184,23 +184,23 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
     {
         NSString *oldValue = [self uuidForDevice];
         NSString *newValue = [NSString stringWithString:value];
-        
+
         if([oldValue isEqualToString:newValue])
         {
             return oldValue;
         }
-        
+
         if(commitMigration)
         {
             [self uuidForDevice_updateWithValue:newValue];
-            
+
             NSMutableOrderedSet *uuidsOfUserDevicesSet = [[NSMutableOrderedSet alloc] initWithArray:[self uuidsOfUserDevices]];
             [uuidsOfUserDevicesSet addObject:newValue];
             [uuidsOfUserDevicesSet removeObject:oldValue];
-            
+
             [self uuidsOfUserDevices_updateWithValue:[uuidsOfUserDevicesSet array]];
             [self uuidsOfUserDevices_iCloudSync];
-            
+
             return [self uuidForDevice];
         }
         else {
@@ -209,7 +209,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
     }
     else {
         [NSException raise:@"Invalid uuid to migrate" format:@"uuid value should be a string of 32 or 36 characters."];
-        
+
         return nil;
     }
 }
@@ -230,7 +230,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 -(NSString *)uuidForDeviceMigratingValueForKey:(NSString *)key service:(NSString *)service accessGroup:(NSString *)accessGroup commitMigration:(BOOL)commitMigration
 {
     NSString *uuidToMigrate = [self _getValueForKey:key userDefaults:YES keychain:YES service:service accessGroup:accessGroup];
-    
+
     return [self uuidForDeviceMigratingValue:uuidToMigrate commitMigration:commitMigration];
 }
 
@@ -238,17 +238,17 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 -(void)uuidsOfUserDevices_iCloudInit
 {
     _uuidsOfUserDevices_iCloudAvailable = NO;
-    
+
     if(NSClassFromString(@"NSUbiquitousKeyValueStore"))
     {
         NSUbiquitousKeyValueStore *iCloud = [NSUbiquitousKeyValueStore defaultStore];
-        
+
         if(iCloud)
         {
             _uuidsOfUserDevices_iCloudAvailable = YES;
-            
+
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uuidsOfUserDevices_iCloudChange:) name:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil];
-            
+
             [self uuidsOfUserDevices_iCloudSync];
         }
         else {
@@ -266,17 +266,17 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
     if( _uuidsOfUserDevices_iCloudAvailable )
     {
         NSUbiquitousKeyValueStore *iCloud = [NSUbiquitousKeyValueStore defaultStore];
-        
+
         //if keychain contains more device identifiers than icloud, maybe that icloud has been empty, so re-write these identifiers to iCloud
         for ( NSString *uuidOfUserDevice in [self uuidsOfUserDevices] )
         {
             NSString *uuidOfUserDeviceAsKey = [NSString stringWithFormat:@"%@_%@", _uuidForDeviceKey, uuidOfUserDevice];
-            
+
             if(![[iCloud stringForKey:uuidOfUserDeviceAsKey] isEqualToString:uuidOfUserDevice]){
                 [iCloud setString:uuidOfUserDevice forKey:uuidOfUserDeviceAsKey];
             }
         }
-        
+
         //toggle a boolean value to force notification on other devices, useful for debug
         [iCloud setBool:![iCloud boolForKey:_uuidsOfUserDevicesToggleKey] forKey:_uuidsOfUserDevicesToggleKey];
         [iCloud synchronize];
@@ -290,26 +290,26 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
     {
         NSMutableOrderedSet *uuidsSet = [[NSMutableOrderedSet alloc] initWithArray:[self uuidsOfUserDevices]];
         NSInteger uuidsCount = [uuidsSet count];
-        
+
         NSUbiquitousKeyValueStore *iCloud = [NSUbiquitousKeyValueStore defaultStore];
         NSDictionary *iCloudDict = [iCloud dictionaryRepresentation];
-        
+
         //NSLog(@"uuidsOfUserDevicesSync: %@", iCloudDict);
-        
+
         [iCloudDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            
+
             NSString *uuidKey = (NSString *)key;
-            
+
             if([uuidKey rangeOfString:_uuidForDeviceKey].location == 0)
             {
                 if([obj isKindOfClass:[NSString class]])
                 {
                     NSString *uuidValue = (NSString *)obj;
-                    
+
                     if([uuidKey rangeOfString:uuidValue].location != NSNotFound && [self uuidValueIsValid:uuidValue])
                     {
                         //NSLog(@"uuid: %@", uuidValue);
-                        
+
                         [uuidsSet addObject:uuidValue];
                     }
                     else {
@@ -318,11 +318,11 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
                 }
             }
         }];
-        
+
         if([uuidsSet count] > uuidsCount)
         {
             [self uuidsOfUserDevices_updateWithValue:[uuidsSet array]];
-            
+
             NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[self uuidsOfUserDevices] forKey:@"uuidsOfUserDevices"];
             [[NSNotificationCenter defaultCenter] postNotificationName:FCUUIDsOfUserDevicesDidChangeNotification object:self userInfo:userInfo];
         }
@@ -342,7 +342,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
     if( _uuidsOfUserDevices == nil ){
         _uuidsOfUserDevices = [self _getOrCreateValueForKey:_uuidsOfUserDevicesKey defaultValue:[self uuidForDevice] userDefaults:YES keychain:YES service:nil accessGroup:nil synchronizable:YES];
     }
-    
+
     return [_uuidsOfUserDevices componentsSeparatedByString:@"|"];
 }
 
@@ -361,15 +361,15 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
     {
         NSString *uuidPattern = @"^[0-9a-f]{32}|[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}$";
         NSRegularExpression *uuidRegExp = [NSRegularExpression regularExpressionWithPattern:uuidPattern options:NSRegularExpressionCaseInsensitive error:nil];
-        
+
         NSRange uuidValueRange = NSMakeRange(0, [uuidValue length]);
         NSRange uuidMatchRange = [uuidRegExp rangeOfFirstMatchInString:uuidValue options:0 range:uuidValueRange];
         NSString *uuidMatchValue;
-        
+
         if(!NSEqualRanges(uuidMatchRange, NSMakeRange(NSNotFound, 0)))
         {
             uuidMatchValue = [uuidValue substringWithRange:uuidMatchRange];
-            
+
             if([uuidMatchValue isEqualToString:uuidValue])
             {
                 return YES;
