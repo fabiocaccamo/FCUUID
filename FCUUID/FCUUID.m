@@ -142,7 +142,7 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 -(NSString *)uuidForInstallation
 {
     if( _uuidForInstallation == nil ){
-        _uuidForInstallation = [self _getOrCreateValueForKey:_uuidForInstallationKey defaultValue:nil userDefaults:YES keychain:YES service:nil accessGroup:nil synchronizable:NO];
+        _uuidForInstallation = [self _getOrCreateValueForKey:_uuidForInstallationKey defaultValue:nil userDefaults:YES keychain:NO service:nil accessGroup:nil synchronizable:NO];
     }
     
     return _uuidForInstallation;
