@@ -5,7 +5,7 @@ This library provides the simplest API to obtain **universally unique identifier
 
 It's possible to retrieve the **UUIDs created for all devices of the same user**, in this way with a little bit of server-side help **it's possible manage guest accounts across multiple devices easily.**
 
-##Requirements & dependencies
+## Requirements & dependencies
 - iOS >= 5.0
 - ARC enabled
 - Key-value storage enabled *(target / Capabilities / iCloud / Key-value storage)*
@@ -14,22 +14,22 @@ It's possible to retrieve the **UUIDs created for all devices of the same user**
 - ***(optional)*** - Key-value storage enabled -> Target / Capabilities / iCloud / Key-value storage enabled if you want to **share** `uuidsOfUserDevices` values **across multiple devices using the same iCloud account**.
 - ***(optional)*** - KeyChain sharing enabled (entitlements and provisioning profile) if you need to **share** the same `uuidForDevice` / `uuidsOfUserDevices` values **across multiple apps with the same bundle seed**.
 
-##Installation
+## Installation
 
-####CocoaPods:
+#### CocoaPods:
 `pod 'FCUUID'`
 
-####Manual install:
+#### Manual install:
 - Copy `FCUUID` folder to your project.
 - Manual install [UICKeyChainStore](https://github.com/kishikawakatsumi/UICKeyChainStore)
 
-###Optional setup:
+### Optional setup:
 It is recommended to do the setup in `applicationDidFinishLaunchingWithOptions` method.
 - Add an observer to the `FCUUIDsOfUserDevicesDidChangeNotification` to be notified about uuids of user devices changes.
 - If necessary, **migrate from a previously used UUID or UDID** using one of the migrations methods listed in the API section (it's recommended to do migration before calling `uuidForDevice` or `uuidsForUserDevices` methods). Keep in mind that **migration works only if the existing value is a valid uuid and `uuidForDevice` has not been created yet**.
 - Call any class method to enforce iCloud sync.
 
-##API
+## API
 **Get different UUIDs** (each one with its own persistency level) 
 
 ```objective-c
@@ -75,7 +75,7 @@ After the migration, any future call to `uuidForDevice` will return the migrated
 +(BOOL)uuidValueIsValid:(NSString *)uuidValue;
 ```
 
-##Persistence 
+## Persistence 
 - **`√`** *yes* 
 - `-` *no* 
 - **`*`** *read notes below* 
@@ -93,21 +93,21 @@ After the migration, any future call to `uuidForDevice` will return the migrated
 
 ***(persists only if the user restores a device backup which includes also keychain's data)*
 
-##FAQ
-####How can I share the device uuid between two apps?
+## FAQ
+#### How can I share the device uuid between two apps?
 You must have **KeyChain sharing enabled** (entitlements and provisioning profile) and your apps identifiers must have the same bundle seed.
 
-####What happens if I call `uuidForDevice` on 2 different devices using same iCloud account and iCloud Keychain?
+#### What happens if I call `uuidForDevice` on 2 different devices using same iCloud account and iCloud Keychain?
 You will obtain 2 **different uuid(s)**, and if you call `uuidsOfUserDevices` you will obtain a list containing the uuids of both devices.
 
-####When I reboot / upgrade / reset my device system, will device uuid change?
+#### When I reboot / upgrade / reset my device system, will device uuid change?
 Please check the **persistence** table above.
 
-##Support development
+## Support development
 
 [![Donate](https://pledgie.com/campaigns/32215.png?skin_name=chrome "Click here to lend your support to: Fabio Caccamo - Open Source Projects and make a donation at pledgie.com !")](https://pledgie.com/campaigns/32215)
 
 [![Donate](https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_pp_142x27.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=fabio%2ecaccamo%40gmail%2ecom&lc=IT&item_name=Fabio%20Caccamo%20%2d%20Open%20Source%20Projects&item_number=FCUUID&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted)
 
-##License
+## License
 Released under [MIT License](LICENSE).
