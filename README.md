@@ -51,7 +51,7 @@ It is recommended to do the setup in `applicationDidFinishLaunchingWithOptions` 
 //changes only on system reset, this is the best replacement to the good old udid (persistent to device)
 +(NSString *)uuidForDevice;
 //or
-#import "UIDevice+FCUUID.h"
+# import "UIDevice+FCUUID.h"
 [[UIDevice currentDevice] uuid];
 ```
 **Get the list of UUIDs of user devices**
