@@ -1,7 +1,7 @@
 FCUUID ![Pod version](http://img.shields.io/cocoapods/v/FCUUID.svg) ![Pod platforms](http://img.shields.io/cocoapods/p/FCUUID.svg) ![Pod license](http://img.shields.io/cocoapods/l/FCUUID.svg)
 ===================
-iOS **UUID** library as alternative to the old good **UDID** and **identifierForVendor**.  
-This library provides the simplest API to obtain **universally unique identifiers with different levels of [persistence](#persistence)**.  
+iOS **UUID** library as alternative to the old good **UDID** and **identifierForVendor**.
+This library provides the simplest API to obtain **universally unique identifiers with different levels of [persistence](#persistence)**.
 
 It's possible to retrieve the **UUIDs created for all devices of the same user**, in this way with a little bit of server-side help **it's possible manage guest accounts across multiple devices easily.**
 
@@ -30,7 +30,7 @@ It is recommended to do the setup in `applicationDidFinishLaunchingWithOptions` 
 - Call any class method to enforce iCloud sync.
 
 ## API
-**Get different UUIDs** (each one with its own persistency level) 
+**Get different UUIDs** (each one with its own persistency level)
 
 ```objective-c
 //changes each time (no persistent)
@@ -59,9 +59,9 @@ It is recommended to do the setup in `applicationDidFinishLaunchingWithOptions` 
 //returns the list of all uuidForDevice of the same user, in this way it's possible manage guest accounts across multiple devices easily
 +(NSArray *)uuidsOfUserDevices;
 ```
-**Migrate from a previously stored UUID / UDID**  
-Before migrating an existing value it's recommended to **debug it** by simply passing `commitMigration:NO` and logging the returned value.  
-When you will be ready for committing the migration, use `commitMigration:YES`.  
+**Migrate from a previously stored UUID / UDID**
+Before migrating an existing value it's recommended to **debug it** by simply passing `commitMigration:NO` and logging the returned value.
+When you will be ready for committing the migration, use `commitMigration:YES`.
 After the migration, any future call to `uuidForDevice` will return the migrated value.
 ```objective-c
 //these methods search for an existing UUID / UDID stored in the KeyChain or in UserDefaults for the given key / service / access-group
@@ -75,10 +75,10 @@ After the migration, any future call to `uuidForDevice` will return the migrated
 +(BOOL)uuidValueIsValid:(NSString *)uuidValue;
 ```
 
-## Persistence 
-- **`√`** *yes* 
-- `-` *no* 
-- **`*`** *read notes below* 
+## Persistence
+- **`√`** *yes*
+- `-` *no*
+- **`*`** *read notes below*
 
 | PERSISTS              | App memory | App relaunch | Reset Advertising Identifier | App reinstall | System reboot | System upgrade | System reset |
 |-----------------------|:----------:|:------------:|:----------------------------:|:-------------:|:-------------:|:--------------:|:------------:|
@@ -104,9 +104,6 @@ You will obtain 2 **different uuid(s)**, and if you call `uuidsOfUserDevices` yo
 Please check the **persistence** table above.
 
 ## Support development
-
-[![Donate](https://pledgie.com/campaigns/32215.png?skin_name=chrome "Click here to lend your support to: Fabio Caccamo - Open Source Projects and make a donation at pledgie.com !")](https://pledgie.com/campaigns/32215)
-
 [![Donate](https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_pp_142x27.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=fabio%2ecaccamo%40gmail%2ecom&lc=IT&item_name=Fabio%20Caccamo%20%2d%20Open%20Source%20Projects&item_number=FCUUID&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted)
 
 ## License
