@@ -19,6 +19,11 @@ It's possible to retrieve the **UUIDs created for all devices of the same user**
 #### CocoaPods:
 `pod 'FCUUID'`
 
+#### [Swift Package Manager](https://github.com/apple/swift-package-manager):
+1. File > Swift Packages > Add Package Dependency
+2. Add https://github.com/fabiocaccamo/FCUUID
+3. Select "Up to Next Major" with "1.0.0"
+
 #### Manual install:
 - Copy `FCUUID` folder to your project.
 - Manual install [UICKeyChainStore](https://github.com/kishikawakatsumi/UICKeyChainStore)
