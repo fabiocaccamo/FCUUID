@@ -24,6 +24,12 @@ It's possible to retrieve the **UUIDs created for all devices of the same user**
 2. Add https://github.com/fabiocaccamo/FCUUID
 3. Select "Up to Next Major" with "1.0.0"
 
+#### [Carthage](https://github.com/Carthage/Carthage):
+
+```ogdl
+github "fabiocaccamo/FCUUID"
+```
+
 #### Manual install:
 - Copy `FCUUID` folder to your project.
 - Manual install [UICKeyChainStore](https://github.com/kishikawakatsumi/UICKeyChainStore)
