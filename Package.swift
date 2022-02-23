@@ -5,7 +5,6 @@ import PackageDescription
 
 let package = Package(
     name: "FCUUID",
-    platforms: [.iOS(.v8)],
     products: [
         .library(
             name: "FCUUID",
