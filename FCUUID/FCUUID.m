@@ -17,6 +17,8 @@ NSString *const FCUUIDsOfUserDevicesDidChangeNotification = @"FCUUIDsOfUserDevic
 
 NSString *const _uuidForInstallationKey = @"fc_uuidForInstallation";
 NSString *const _uuidForDeviceKey = @"fc_uuidForDevice";
+NSString *const _uuidForDeviceSharedKey = @"fc_uuidForDeviceShared";
+NSString *const _uuidForDeviceSharedService = @"FCUUIDShared";
 NSString *const _uuidsOfUserDevicesKey = @"fc_uuidsOfUserDevices";
 NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 
@@ -232,6 +234,65 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
     NSString *uuidToMigrate = [self _getValueForKey:key userDefaults:YES keychain:YES service:service accessGroup:accessGroup];
 
     return [self uuidForDeviceMigratingValue:uuidToMigrate commitMigration:commitMigration];
+}
+
+
+-(void)setSharedKeychainAccessGroup:(NSString *)accessGroup
+{
+    _sharedAccessGroup = accessGroup;
+    _uuidForDeviceShared = nil;
+}
+
+
+-(NSString *)existingSharedDeviceUUID
+{
+    if(!_sharedAccessGroup) {
+        [NSException raise:@"FCUUID shared access group not configured" format:@"Call setSharedKeychainAccessGroup: before accessing shared UUIDs."];
+        return nil;
+    }
+
+    return [self _getValueForKey:_uuidForDeviceSharedKey userDefaults:NO keychain:YES service:_uuidForDeviceSharedService accessGroup:_sharedAccessGroup];
+}
+
+
+-(NSString *)uuidForDeviceShared
+{
+    if(!_sharedAccessGroup) {
+        [NSException raise:@"FCUUID shared access group not configured" format:@"Call setSharedKeychainAccessGroup: before accessing shared UUIDs."];
+        return nil;
+    }
+
+    if(_uuidForDeviceShared == nil) {
+        _uuidForDeviceShared = [self _getOrCreateValueForKey:_uuidForDeviceSharedKey defaultValue:nil userDefaults:NO keychain:YES service:_uuidForDeviceSharedService accessGroup:_sharedAccessGroup synchronizable:NO];
+    }
+
+    return _uuidForDeviceShared;
+}
+
+
+-(NSString *)uuidForDeviceSharedMigratingValue:(NSString *)value
+{
+    if(!_sharedAccessGroup) {
+        [NSException raise:@"FCUUID shared access group not configured" format:@"Call setSharedKeychainAccessGroup: before accessing shared UUIDs."];
+        return nil;
+    }
+
+    if(![self uuidValueIsValid:value]) {
+        [NSException raise:@"Invalid uuid to migrate" format:@"uuid value should be a string of 32 or 36 characters."];
+        return nil;
+    }
+
+    NSString *existing = [self existingSharedDeviceUUID];
+
+    if(existing) {
+        _uuidForDeviceShared = existing;
+        return existing;
+    }
+
+    _uuidForDeviceShared = [NSString stringWithString:value];
+    [self _setValue:_uuidForDeviceShared forKey:_uuidForDeviceSharedKey userDefaults:NO keychain:YES service:_uuidForDeviceSharedService accessGroup:_sharedAccessGroup synchronizable:NO];
+
+    return _uuidForDeviceShared;
 }
 
 
@@ -463,6 +524,30 @@ NSString *const _uuidsOfUserDevicesToggleKey = @"fc_uuidsOfUserDevicesToggle";
 +(BOOL)uuidValueIsValid:(NSString *)uuidValue
 {
     return [[self sharedInstance] uuidValueIsValid:uuidValue];
+}
+
+
++(void)setSharedKeychainAccessGroup:(NSString *)accessGroup
+{
+    [[self sharedInstance] setSharedKeychainAccessGroup:accessGroup];
+}
+
+
++(NSString *)existingSharedDeviceUUID
+{
+    return [[self sharedInstance] existingSharedDeviceUUID];
+}
+
+
++(NSString *)uuidForDeviceShared
+{
+    return [[self sharedInstance] uuidForDeviceShared];
+}
+
+
++(NSString *)uuidForDeviceSharedMigratingValue:(NSString *)value
+{
+    return [[self sharedInstance] uuidForDeviceSharedMigratingValue:value];
 }
 
 
